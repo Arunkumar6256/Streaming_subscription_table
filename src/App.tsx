@@ -18,39 +18,60 @@ function App() {
     <AuthProvider>
       <Router>
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-          <Navbar />
           <AnimatePresence mode="wait">
             <Routes>
+              {/* Public routes - no authentication required */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              
+              {/* Protected routes - authentication required */}
               <Route path="/" element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
+                <>
+                  <Navbar />
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                  <Footer />
+                </>
               } />
               <Route path="/amazon-prime" element={
-                <ProtectedRoute>
-                  <AmazonPrime />
-                </ProtectedRoute>
+                <>
+                  <Navbar />
+                  <ProtectedRoute>
+                    <AmazonPrime />
+                  </ProtectedRoute>
+                  <Footer />
+                </>
               } />
               <Route path="/netflix" element={
-                <ProtectedRoute>
-                  <Netflix />
-                </ProtectedRoute>
+                <>
+                  <Navbar />
+                  <ProtectedRoute>
+                    <Netflix />
+                  </ProtectedRoute>
+                  <Footer />
+                </>
               } />
               <Route path="/disney-hotstar" element={
-                <ProtectedRoute>
-                  <DisneyHotstar />
-                </ProtectedRoute>
+                <>
+                  <Navbar />
+                  <ProtectedRoute>
+                    <DisneyHotstar />
+                  </ProtectedRoute>
+                  <Footer />
+                </>
               } />
               <Route path="/compare" element={
-                <ProtectedRoute>
-                  <Compare />
-                </ProtectedRoute>
+                <>
+                  <Navbar />
+                  <ProtectedRoute>
+                    <Compare />
+                  </ProtectedRoute>
+                  <Footer />
+                </>
               } />
             </Routes>
           </AnimatePresence>
-          <Footer />
         </div>
       </Router>
     </AuthProvider>
