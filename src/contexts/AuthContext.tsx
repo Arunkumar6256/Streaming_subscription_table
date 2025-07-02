@@ -38,11 +38,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     // Check if user is logged in on app start
-    const savedUser = localStorage.getItem('streamcompare_user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    setIsLoading(false);
+    const checkAuthStatus = () => {
+      try {
+        const savedUser = localStorage.getItem('streamcompare_user');
+        if (savedUser) {
+          const parsedUser = JSON.parse(savedUser);
+          setUser(parsedUser);
+        }
+      } catch (error) {
+        console.error('Error parsing saved user:', error);
+        localStorage.removeItem('streamcompare_user');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthStatus();
   }, []);
 
   const signup = async (userData: SignupData): Promise<boolean> => {
@@ -89,14 +100,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       // Get users from localStorage
       const existingUsers = JSON.parse(localStorage.getItem('streamcompare_users') || '[]');
-      const user = existingUsers.find((u: any) => u.email === email && u.password === password);
+      const foundUser = existingUsers.find((u: any) => u.email === email && u.password === password);
       
-      if (!user) {
-        throw new Error('Invalid email or password');
+      if (!foundUser) {
+        return false;
       }
 
       // Remove password from user object before setting
-      const { password: _, ...userWithoutPassword } = user;
+      const { password: _, ...userWithoutPassword } = foundUser;
       setUser(userWithoutPassword);
       localStorage.setItem('streamcompare_user', JSON.stringify(userWithoutPassword));
 
